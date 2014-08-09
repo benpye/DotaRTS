@@ -1,0 +1,65 @@
+// Dota Heroes File
+"DOTAAbilities"
+{
+	"Version"		"1"
+
+	//=================================================================================================================
+	// Commander: Channel Build HQ
+	//=================================================================================================================
+	"rts_commander_build_hq"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"BaseClass"						"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_CHANNELLED"
+		"MaxLevel"						"1"
+
+		// Casting
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityCastRange"				"300"
+		"AbilityCastPoint"				"0.0" 						// Time before spell goes off when cast
+		"AbilityCastAnimation"			"ACT_DOTA_DISABLED"			// Activity
+		"AnimationPlaybackRate"			"1.0"						// Animation speed multiplier
+
+		// Time		
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityChannelTime"			"3600.0"
+		"AbilityCooldown"				"0.0"
+
+		// Cost
+		//-------------------------------------------------------------------------------------------------------------
+		"AbilityManaCost"				"0"
+		
+		"OnSpellStart"
+		{
+			"RunScript"
+			{
+				"Target"				"POINT"
+				"ScriptFile"			"scripts/vscripts/abilities/ability_handler.lua"
+				"Function"				"OnSpellStart"
+			}
+		}
+		
+		"OnChannelInterrupted"
+		{
+			"RunScript"
+			{
+				"Target"				"POINT"
+				"ScriptFile"			"scripts/vscripts/abilities/ability_handler.lua"
+				"Function"				"OnChannelInterrupted"
+			}
+		}
+	}
+
+	//=================================================================================================================
+	// Building: Incomplete
+	//=================================================================================================================
+	"rts_building_incomplete"
+	{
+		// General
+		//-------------------------------------------------------------------------------------------------------------
+		"BaseClass"						"ability_datadriven"
+		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_PASSIVE"
+		"MaxLevel"						"1"
+	}
+}
