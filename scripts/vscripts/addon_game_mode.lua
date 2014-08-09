@@ -8,7 +8,6 @@ print( "Dota RTS game mode loaded." )
 
 if RTS == nil then
 	_G.RTS = class({})
-	RTS.BuildingList = {}
 end
 
 require( "abilities.ability_handler")
@@ -66,9 +65,9 @@ function RTS:OnEntKilled( event )
 	end
 
 	if killedUnit:GetClassname() == "npc_dota_building" then
-		for k,building in pairs( RTS.BuildingList ) do
+		for k,building in pairs( RTS.Buildings.List ) do
 			if building.Entity:GetEntityIndex() == event.entindex_killed then
-				table.remove( RTS.BuildingList, k )
+				table.remove( RTS.Buildings.List, k )
 				break
 			end
 		end

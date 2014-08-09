@@ -1,16 +1,35 @@
-if RTS.BuildingBase == nil then
-	RTS.BuildingBase = class({})
+if RTS.Buildings == nil then
+	RTS.Buildings = {}
+	RTS.Buildings.List = {}
+	RTS.Buildings.Base = class({})
 end
 
 -- Base building class, provides simple building mechanic
 
-RTS.BuildingBase.BUILDTIME = 1.0
-RTS.BuildingBase.TICKSIZE = 0.1
-RTS.BuildingBase.UNIT = "npc_rts_building_hq"
-RTS.BuildingBase.Complete = false
-RTS.BuildingBase._inProgress = false
+RTS.Buildings.Base.BUILDTIME = 1.0
+RTS.Buildings.Base.TICKSIZE = 0.1
+RTS.Buildings.Base.UNIT = "npc_rts_building_hq"
+RTS.Buildings.Base.MAXCOUNT = -1
+RTS.Buildings.Base.Valid = false
+RTS.Buildings.Base.Complete = false
+RTS.Buildings.Base._inProgress = false
 
-function RTS.BuildingBase:constructor( position, player, team )
+function RTS.Buildings.Base:constructor( position, player, team )
+	if self.MAXCOUNT ~= -1 then
+		local existingCount = 0
+		for _, building in pairs(RTS.Buildings.List) do
+			if building.Player == player and building.Team == team and building.UNIT == self.UNIT then
+				existingCount = existingCount + 1
+			end
+		end
+
+		-- TODO: Better UI for too many of a unit
+		if existingCount >= self.MAXCOUNT then
+			GameRules:SendCustomMessage( "Unit cap reached", team, player:GetPlayerID() )
+			return
+		end
+	end
+
 	self.Player = player
 	self.Team = team
 	self.Entity = CreateUnitByName( self.UNIT, position, false,
@@ -22,10 +41,13 @@ function RTS.BuildingBase:constructor( position, player, team )
 	self.Entity:AddAbility( "rts_building_incomplete" )
 
 	-- Add self to list of buildings
-	table.insert( RTS.BuildingList, self )
+	table.insert( RTS.Buildings.List, self )
+
+	-- If we get this far, we're probably valid
+	self.Valid = true
 end
 
-function RTS.BuildingBase:Building()
+function RTS.Buildings.Base:Building()
 	-- If we stop building stop building
 	if self._inProgress == false then
 		return nil
@@ -56,16 +78,16 @@ function RTS.BuildingBase:Building()
 	return self.TICKSIZE
 end
 
-function RTS.BuildingBase:StopBuilding()
+function RTS.Buildings.Base:StopBuilding()
 	self._inProgress = false
 end
 
-function RTS.BuildingBase:ResumeBuilding( caster )
+function RTS.Buildings.Base:ResumeBuilding( caster )
 	self._inProgress = true
 	self.Caster = caster
 	self.Entity:SetThink( "Building", self, "building", self.TICKSIZE )
 end
 
-function RTS.BuildingBase:IsBuilding()
+function RTS.Buildings.Base:IsBuilding()
 	return self._inProgress
 end
