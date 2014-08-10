@@ -37,17 +37,24 @@ function RTS.Units.Base:constructor( position, player, team )
 	self.Player = player
 	self.Team = team
 
+	-- Add self to list of units
+	table.insert( RTS.Units.List, self )
+
 	-- If we get this far, we're probably valid
 	self.Valid = true
 end
 
 function RTS.Units.Base:DoComplete()
 	self.Complete = true
+	self._inProgress = false
 
 	self.Entity = CreateUnitByName( self.UNIT, self._initialPosition, false,
 					self.Player, self.Player, self.Team )
 
 	self.Entity:SetControllableByPlayer( self.Player:GetPlayerID(), true )
+
+	local item = CreateItem( "item_quelling_blade", nil, nil )
+	self.Entity:AddItem( item )
 
 	-- add correct "abilities" here
 	for _,v in pairs( self.ABILITIES ) do
@@ -61,9 +68,6 @@ function RTS.Units.Base:DoComplete()
 		end
 		ability:SetLevel( ability:GetMaxLevel() )
 	end
-
-	-- Add self to list of units
-	table.insert( RTS.Units.List, self )
 end
 
 function RTS.Units.Base:Building()
@@ -84,7 +88,6 @@ function RTS.Units.Base:Building()
 	if self.Complete == true then
 		self:DoComplete()
 		self.Caster:InterruptChannel()
-		self._inProgress = false
 		return nil
 	end
 
@@ -92,6 +95,8 @@ function RTS.Units.Base:Building()
 end
 
 function RTS.Units.Base:StopBuilding()
+	self._inProgress = false
+
 	for k,v in pairs( RTS.Units.List ) do
 		if v == self then
 			table.remove( RTS.Units.List, k )

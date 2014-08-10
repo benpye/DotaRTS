@@ -10,7 +10,7 @@ function RTS.Abilities._onAbility( trigger, keys )
 			RTS.Abilities[abilityName][trigger]( keys )
 		end
 	else
-		Msg( "Invalid ability called: " .. abilityName .. "\n" )
+		Warning( "Invalid ability called: " .. abilityName .. " , did you forget to register it?\n" )
 	end
 end
 

@@ -1,5 +1,6 @@
 require( "abilities.ability_handler" )
 require( "abilities.channel_interrupt" )
+require( "buildings.rts_building_base" )
 
 if RTS.Abilities.Base == nil then
 	RTS.Abilities.Base = {}

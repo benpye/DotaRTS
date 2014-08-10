@@ -39,6 +39,7 @@ function RTS.Buildings.Base:constructor( position, player, team )
 
 	self.Entity:SetInvulnCount( 0 )
 	self.Entity:SetHealth( 1 )
+	self.Entity:SetRenderColor( 0, 0, 255 )
 
 	self.Entity:AddAbility( "rts_building_incomplete" )
 
@@ -66,12 +67,10 @@ function RTS.Buildings.Base:Building()
 	self.Entity:SetHealth( newHealth )
 
 	if self.Complete == true then
-		-- Building is being built, not repaired
-		if self.Entity:HasAbility( "rts_building_incomplete" ) then
-			self.Entity:RemoveAbility( "rts_building_incomplete" )
-		end
+		self.Entity:RemoveAbility( "rts_building_incomplete" )
 
-		self.Caster:InterruptChannel()
+		self.Entity:SetRenderColor( 255, 255, 255 )
+
 		self._inProgress = false
 		-- add correct "abilities" here
 		for _,v in pairs( self.ABILITIES ) do
@@ -85,6 +84,8 @@ function RTS.Buildings.Base:Building()
 			end
 			ability:SetLevel( ability:GetMaxLevel() )
 		end
+
+		self.Caster:InterruptChannel()
 		
 		return nil
 	end

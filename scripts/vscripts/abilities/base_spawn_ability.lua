@@ -1,5 +1,6 @@
 require( "abilities.ability_handler" )
 require( "abilities.channel_interrupt" )
+require( "units.rts_unit_base" )
 
 if RTS.Abilities.Base == nil then
 	RTS.Abilities.Base = {}
@@ -22,11 +23,11 @@ function RTS.Abilities.Base.RegisterSpawn( name, spawnClass )
 	end )
 
 	RTS.Abilities.RegisterAbility( name, "OnChannelInterrupted", function ( keys )
-		for _,building in pairs( RTS.Units.List ) do
-			-- Only one channel so this is our building
-			if building.Caster == keys.caster and building:IsBuilding() then
-				if building.Complete == false then
-					building:StopBuilding()
+		for _,unit in pairs( RTS.Units.List ) do
+			-- Only one channel so this is our unit
+			if unit.Caster == keys.caster and unit:IsBuilding() then
+				if unit.Complete == false then
+					unit:StopBuilding()
 				end
 				break
 			end

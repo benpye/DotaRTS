@@ -35,6 +35,7 @@ function RTS:InitGameMode()
 	GameRules:SetGoldPerTick( 0 )
 	GameRules:SetHeroSelectionTime( 0.0 )
 	GameRules:SetPreGameTime( 0.0 )
+	GameRules:SetTreeRegrowTime( 9999999.9 )
 
 	GameMode:SetTowerBackdoorProtectionEnabled( false )
 	GameMode:SetRecommendedItemsDisabled( true )
@@ -43,6 +44,7 @@ function RTS:InitGameMode()
 	-- Hook into game events
 	ListenToGameEvent( "entity_killed", Dynamic_Wrap( RTS, "OnEntityKilled" ), self )
 	ListenToGameEvent( "npc_spawned", Dynamic_Wrap( RTS, "OnNPCSpawned" ), self )
+	ListenToGameEvent( "game_rules_state_change", Dynamic_Wrap( RTS, "OnGameRulesStateChange" ), self )
 
 	RTS.Abilities.InterruptChannelInit()
 
@@ -79,6 +81,14 @@ function RTS:OnEntityKilled( event )
 				end
 			end
 		end
+	end
+end
+
+function RTS:OnGameRulesStateChange()
+	local newState = GameRules:State_Get()
+	if newState == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
+		-- TODO: Replace this with our own UI
+		SendToConsole( "dota_sf_hud_channelbar 0" )
 	end
 end
 
