@@ -3,12 +3,4 @@
 // the specified key-value combinations.  Use override_hero <hero_to_override> for this.
 "DOTAHeroes"
 {
-	//=================================================================================================================
-	// RTS Commander
-	//=================================================================================================================
-	"npc_rts_commander"
-	{
-		"override_hero"				"npc_dota_hero_abaddon"
-		"Ability1"					"rts_commander_build_hq"					// Ability 1
-	}
 }

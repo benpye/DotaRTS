@@ -6,35 +6,23 @@ if RTS.Abilities.Base == nil then
 end
 
 -- Basic building ability, uses a channel
-function RTS.Abilities.Base.RegisterBuild( name, buildingClass )
+function RTS.Abilities.Base.RegisterSpawn( name, spawnClass )
 	RTS.Abilities.RegisterAbility( name, "OnSpellStart", function ( keys )
 		local caster = keys.caster
 		local position = keys.target_points[1]
 		local player = caster:GetOwner()
 		local team = caster:GetTeamNumber()
 
-		for _,building in pairs( RTS.Buildings.List ) do
-			if building.Team == team
-				and building.Complete == false
-				and building.Player == player then
-				-- There's an existing building, on our team, incomplete, really close, keep building
-				if ( building.Entity:GetOrigin() - position ):Length() < 100 then
-					building:ResumeBuilding( caster )
-					return
-				end
-			end
-		end
-
-		local building = buildingClass( position, player, team )
-		if building.Valid == true then
-			building:ResumeBuilding( caster )
+		local unit = spawnClass( position, player, team )
+		if unit.Valid == true then
+			unit:StartBuilding( caster )
 		else
 			RTS.Abilities.InterruptChannel( caster )
 		end
 	end )
 
 	RTS.Abilities.RegisterAbility( name, "OnChannelInterrupted", function ( keys )
-		for _,building in pairs( RTS.Buildings.List ) do
+		for _,building in pairs( RTS.Units.List ) do
 			-- Only one channel so this is our building
 			if building.Caster == keys.caster and building:IsBuilding() then
 				if building.Complete == false then

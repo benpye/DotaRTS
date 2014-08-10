@@ -10,12 +10,11 @@ if RTS == nil then
 	_G.RTS = class({})
 end
 
-require( "abilities.ability_handler")
-require( "abilities.commander_abilities")
-
 -- Precache resources
 function Precache( context )
 	PrecacheUnitByNameSync( "npc_rts_building_hq", context )
+	PrecacheUnitByNameSync( "npc_rts_unit_commander", context )
+	PrecacheUnitByNameSync( "npc_rts_unit_worker", context )
 end
 
 --------------------------------------------------------------------------------
@@ -35,41 +34,69 @@ function RTS:InitGameMode()
 	GameRules:SetHeroRespawnEnabled( false )
 	GameRules:SetGoldPerTick( 0 )
 	GameRules:SetHeroSelectionTime( 0.0 )
-	GameRules:SetHeroSelectionTime( 0.0 )
 	GameRules:SetPreGameTime( 0.0 )
 
 	GameMode:SetTowerBackdoorProtectionEnabled( false )
+	GameMode:SetRecommendedItemsDisabled( true )
+	GameMode:SetTopBarTeamValuesVisible( false )
 
 	-- Hook into game events
-	ListenToGameEvent( "entity_killed", Dynamic_Wrap( RTS, "OnEntKilled" ), self )
+	ListenToGameEvent( "entity_killed", Dynamic_Wrap( RTS, "OnEntityKilled" ), self )
+	ListenToGameEvent( "npc_spawned", Dynamic_Wrap( RTS, "OnNPCSpawned" ), self )
+
+	RTS.Abilities.InterruptChannelInit()
 
 	-- Register Think
-	-- GameMode:SetContextThink( "RTS:GameThink", function() return self:GameThink() end, 0.25 )
+	-- GameMode:SetContextThink( "RTS.GameThink", function() return RTS.GameThink() end, 0.1 )
 end
 
 --------------------------------------------------------------------------------
 function RTS:GameThink()
-	return 0.25
+	return 0.1
 end
 
-
-function RTS:OnEntKilled( event )
+function RTS:OnEntityKilled( event )
 	local killedUnit = EntIndexToHScript( event.entindex_killed )
 	if not killedUnit then
 		return
 	end
 
-	for k,v in pairs( _G ) do
-		Msg( tostring(k) .. "\n" )
-		Msg( "    " .. tostring(v) .. "\n" )
-	end
-
 	if killedUnit:GetClassname() == "npc_dota_building" then
-		for k,building in pairs( RTS.Buildings.List ) do
-			if building.Entity:GetEntityIndex() == event.entindex_killed then
-				table.remove( RTS.Buildings.List, k )
-				break
+		for k, building in pairs( RTS.Buildings.List ) do
+			if building.Entity ~= nil then
+				if building.Entity:GetEntityIndex() == event.entindex_killed then
+					table.remove( RTS.Buildings.List, k )
+					break
+				end
+			end
+		end
+	elseif killedUnit:GetClassname() == "npc_dota_creature" then
+		for k, unit in pairs( RTS.Units.List ) do
+			if unit.Entity ~= nil then
+				if unit.Entity:GetEntityIndex() == event.entindex_killed then
+					table.remove( RTS.Units.List, k )
+					break
+				end
 			end
 		end
 	end
 end
+
+require( "units.rts_unit_commander" )
+
+function RTS:OnNPCSpawned( event )
+	local npc = EntIndexToHScript( event.entindex )
+	if not npc or npc:GetClassname() ~= "npc_dota_hero_abaddon" then
+		return
+	end
+
+	npc:AddNewModifier( npc, nil, "modifier_invulnerable", {} )
+	npc:AddNoDraw()
+	npc:SetMoveCapability( 0 ) -- DOTA_UNIT_MOVE_CAP_NONE
+
+	local commander = RTS.Units.Commander( npc:GetOrigin(), npc:GetOwner(), npc:GetTeam() )
+	commander:DoComplete()
+end
+
+require( "abilities.ability_handler" )
+require( "abilities.abilities" )

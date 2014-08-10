@@ -10,6 +10,7 @@ RTS.Buildings.Base.BUILDTIME = 1.0
 RTS.Buildings.Base.TICKSIZE = 0.1
 RTS.Buildings.Base.UNIT = "npc_rts_building_hq"
 RTS.Buildings.Base.MAXCOUNT = -1
+RTS.Buildings.Base.ABILITIES = {}
 RTS.Buildings.Base.Valid = false
 RTS.Buildings.Base.Complete = false
 RTS.Buildings.Base._inProgress = false
@@ -34,6 +35,7 @@ function RTS.Buildings.Base:constructor( position, player, team )
 	self.Team = team
 	self.Entity = CreateUnitByName( self.UNIT, position, false,
 					self.Player, self.Player, self.Team )
+	self.Entity:SetControllableByPlayer( self.Player:GetPlayerID(), true )
 
 	self.Entity:SetInvulnCount( 0 )
 	self.Entity:SetHealth( 1 )
@@ -72,6 +74,18 @@ function RTS.Buildings.Base:Building()
 		self.Caster:InterruptChannel()
 		self._inProgress = false
 		-- add correct "abilities" here
+		for _,v in pairs( self.ABILITIES ) do
+			self.Entity:AddAbility( v )
+		end
+
+		for i=0, self.Entity:GetAbilityCount() - 1, 1 do
+			local ability = self.Entity:GetAbilityByIndex( i )
+			if ability == nil then
+				break
+			end
+			ability:SetLevel( ability:GetMaxLevel() )
+		end
+		
 		return nil
 	end
 

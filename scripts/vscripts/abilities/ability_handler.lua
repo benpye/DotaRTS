@@ -9,6 +9,8 @@ function RTS.Abilities._onAbility( trigger, keys )
 		if RTS.Abilities[abilityName][trigger] ~= nil then
 			RTS.Abilities[abilityName][trigger]( keys )
 		end
+	else
+		Msg( "Invalid ability called: " .. abilityName .. "\n" )
 	end
 end
 
