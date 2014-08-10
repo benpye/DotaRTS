@@ -9,5 +9,6 @@ RTS.Buildings.HQ.TICKSIZE = 0.1
 RTS.Buildings.HQ.UNIT = "npc_rts_building_hq"
 RTS.Buildings.HQ.MAXCOUNT = 1
 RTS.Buildings.HQ.ABILITIES = {
-	"rts_spawn_worker"
+	"rts_spawn_worker",
+	"rts_internal_destroy_tree"
 }

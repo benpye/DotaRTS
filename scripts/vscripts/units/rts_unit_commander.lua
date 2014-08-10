@@ -10,9 +10,5 @@ RTS.Units.Commander.UNIT = "npc_rts_unit_commander"
 RTS.Units.Commander.MAXCOUNT = 1
 RTS.Units.Commander.ABILITIES = {
 	"rts_build_hq",
-	"rts_spawn_worker",
-	"rts_spawn_worker",
-	"rts_spawn_worker",
-	"rts_spawn_worker",
-	"rts_spawn_worker",
+	"rts_internal_destroy_tree"
 }

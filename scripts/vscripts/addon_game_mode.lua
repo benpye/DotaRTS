@@ -10,6 +10,8 @@ if RTS == nil then
 	_G.RTS = class({})
 end
 
+require( "utils.abilities" )
+
 -- Precache resources
 function Precache( context )
 	PrecacheUnitByNameSync( "npc_rts_building_hq", context )
@@ -35,7 +37,7 @@ function RTS:InitGameMode()
 	GameRules:SetGoldPerTick( 0 )
 	GameRules:SetHeroSelectionTime( 0.0 )
 	GameRules:SetPreGameTime( 0.0 )
-	GameRules:SetTreeRegrowTime( 9999999.9 )
+	GameRules:SetTreeRegrowTime( 1000000000 )
 
 	GameMode:SetTowerBackdoorProtectionEnabled( false )
 	GameMode:SetRecommendedItemsDisabled( true )
@@ -47,6 +49,8 @@ function RTS:InitGameMode()
 	ListenToGameEvent( "game_rules_state_change", Dynamic_Wrap( RTS, "OnGameRulesStateChange" ), self )
 
 	RTS.Abilities.InterruptChannelInit()
+
+	RTS.Utils.Abilities.Init()
 
 	-- Register Think
 	-- GameMode:SetContextThink( "RTS.GameThink", function() return RTS.GameThink() end, 0.1 )

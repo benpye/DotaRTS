@@ -5,12 +5,16 @@ end
 function RTS.Abilities._onAbility( trigger, keys )
 	local abilityName = keys.ability:GetAbilityName()
 
+	Msg( abilityName )
+
 	if RTS.Abilities[abilityName] ~= nil then
 		if RTS.Abilities[abilityName][trigger] ~= nil then
 			RTS.Abilities[abilityName][trigger]( keys )
+		else
+			Warning( "[ABILITIES] Invalid trigger called: " .. trigger .. " on ability " .. abilityName .. " , did you forget to register it?\n" )
 		end
 	else
-		Warning( "Invalid ability called: " .. abilityName .. " , did you forget to register it?\n" )
+		Warning( "[ABILITIES] Invalid ability called: " .. abilityName .. " , did you forget to register it?\n" )
 	end
 end
 
