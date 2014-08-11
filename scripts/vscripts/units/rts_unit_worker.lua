@@ -5,7 +5,6 @@ if RTS.Units.Worker == nil then
 end
 
 RTS.Units.Worker.BUILDTIME = 1.0
-RTS.Units.Worker.TICKSIZE = 0.1
 RTS.Units.Worker.UNIT = "npc_rts_unit_worker"
 RTS.Units.Worker.MAXCOUNT = -1
 RTS.Units.Worker.ABILITIES = {

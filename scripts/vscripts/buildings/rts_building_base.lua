@@ -4,11 +4,34 @@ if RTS.Buildings == nil then
 	RTS.Buildings.Base = class({})
 end
 
+function RTS.Buildings.GetByEntity( ent )
+	for _, building in pairs( RTS.Buildings.List ) do
+		if building.Entity == ent then
+			return building
+		end
+	end
+
+	return nil
+end
+
+function RTS.Buildings.GetByPlayer( player, klass )
+	local buildings = {}
+	for _, building in pairs( RTS.Buildings.List ) do
+		if building.UNIT == klass.UNIT then
+			if building.Player == player then
+				table.insert( buildings, building )
+			end
+		end
+	end
+
+	return buildings
+end
+
 -- Base building class, provides simple building mechanic
 
 RTS.Buildings.Base.BUILDTIME = 1.0
 RTS.Buildings.Base.TICKSIZE = 0.1
-RTS.Buildings.Base.UNIT = "npc_rts_building_hq"
+RTS.Buildings.Base.UNIT = "npc_rts_building_base"
 RTS.Buildings.Base.MAXCOUNT = -1
 RTS.Buildings.Base.ABILITIES = {}
 RTS.Buildings.Base.Valid = false

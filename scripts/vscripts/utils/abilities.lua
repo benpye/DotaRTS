@@ -27,3 +27,16 @@ function RTS.Utils.KillTree( tree )
 	local ability = RTS.Utils.Abilities._abilities[ "rts_internal_destroy_tree" ]
 	RTS.Utils.Abilities._internalUnit:CastAbilityOnPosition( tree:GetOrigin(), ability, 0 )
 end
+
+function RTS.Utils.GetAbilityByName( entity, str )
+	for i=0, entity:GetAbilityCount(), 1 do
+		local ability = entity:GetAbilityByIndex( i )
+		if ability ~= nil then
+			if ability:GetAbilityName() == str then
+				return ability
+			end
+		end
+	end
+
+	return nil
+end

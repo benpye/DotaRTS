@@ -5,7 +5,6 @@ if RTS.Units.Commander == nil then
 end
 
 RTS.Units.Commander.BUILDTIME = 1.0
-RTS.Units.Commander.TICKSIZE = 0.1
 RTS.Units.Commander.UNIT = "npc_rts_unit_commander"
 RTS.Units.Commander.MAXCOUNT = 1
 RTS.Units.Commander.ABILITIES = {

@@ -4,11 +4,21 @@ if RTS.Units == nil then
 	RTS.Units.Base = class({})
 end
 
+function RTS.Units.GetByEntity( ent )
+	for _, unit in pairs( RTS.Units.List ) do
+		if unit.Entity == ent then
+			return unit
+		end
+	end
+
+	return nil
+end
+
 -- Base unit class, provides simple building mechanic
 
 RTS.Units.Base.BUILDTIME = 10.0
 RTS.Units.Base.TICKSIZE = 0.1
-RTS.Units.Base.UNIT = "npc_rts_unit_commander"
+RTS.Units.Base.UNIT = "npc_rts_unit_base"
 RTS.Units.Base.MAXCOUNT = -1
 RTS.Units.Base.ABILITIES = {}
 RTS.Units.Base.Valid = false

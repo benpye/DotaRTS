@@ -1,9 +1,59 @@
 require( "abilities.base_build_ability" )
 require( "abilities.base_spawn_ability" )
+require( "buildings.rts_building_base" )
 require( "buildings.rts_building_hq" )
+require( "units.rts_unit_base" )
 require( "units.rts_unit_worker" )
 require( "units.rts_unit_gatherer" )
+require( "rts_resource_manager" )
 
 RTS.Abilities.Base.RegisterSpawn( "rts_spawn_worker", RTS.Units.Worker )
 RTS.Abilities.Base.RegisterSpawn( "rts_spawn_lumberjack", RTS.Units.Gatherer )
 RTS.Abilities.Base.RegisterBuild( "rts_build_hq", RTS.Buildings.HQ )
+
+RTS.Abilities.RegisterAbility( "rts_get_wood", "OnSpellStart", function ( keys )
+	local caster = keys.caster
+	local tree = keys.target
+	local player = caster:GetOwner()
+	local team = caster:GetTeamNumber()
+	local unit = RTS.Units.GetByEntity( caster )
+	local resource = RTS.Resources.GetByEntity( tree )
+
+	if unit.TYPE ~= resource.Type then
+		Msg( "Wrong resource\n" )
+		RTS.Utils.Timer.Register( function() caster:InterruptChannel() end, 0.1 )
+	else
+		unit:GatherResource( resource )
+	end
+	end )
+
+RTS.Abilities.RegisterAbility( "rts_get_wood", "OnChannelInterrupted", function ( keys )
+	local caster = keys.caster
+	local tree = keys.target
+	local player = caster:GetOwner()
+	local team = caster:GetTeamNumber()
+	local unit = RTS.Units.GetByEntity( caster )
+	local resource = RTS.Resources.GetByEntity( tree )
+
+	unit:StopGathering()
+	end )
+
+RTS.Abilities.RegisterAbility( "rts_deposit_resource", "OnSpellStart", function ( keys )
+	local caster = keys.caster
+	local target = keys.target
+	local player = caster:GetOwner()
+	local team = caster:GetTeamNumber()
+	local unit = RTS.Units.GetByEntity( caster )
+	local hq = RTS.Buildings.GetByEntity( target )
+	if hq.UNIT ~= "npc_rts_building_hq" then
+		GameRules:SendCustomMessage( "Wrong building!", team, player:GetPlayerID() )
+		return
+	end
+
+	local gatherer = RTS.Units.GetByEntity( caster )
+
+	if gatherer.CurrentResource ~= nil then
+		local ability = RTS.Utils.GetAbilityByName( caster, "rts_get_wood" )
+		caster:CastAbilityOnTarget( gatherer.CurrentResource.Entity, ability, 0 )
+	end
+	end )

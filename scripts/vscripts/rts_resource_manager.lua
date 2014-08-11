@@ -19,6 +19,16 @@ function RTS.Resources._VectorInRegion( vec, region )
 	return false
 end
 
+function RTS.Resources.GetByEntity( ent )
+	for _, resource in pairs( RTS.Resources.List ) do
+		if resource.Entity == ent then
+			return resource
+		end
+	end
+
+	return nil
+end
+
 function RTS.Resources.Init()
 	local resourceEntities = Entities:FindAllByClassname( "ent_dota_tree" )
 
