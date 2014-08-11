@@ -9,6 +9,5 @@ RTS.Units.Commander.TICKSIZE = 0.1
 RTS.Units.Commander.UNIT = "npc_rts_unit_commander"
 RTS.Units.Commander.MAXCOUNT = 1
 RTS.Units.Commander.ABILITIES = {
-	"rts_build_hq",
-	"rts_internal_destroy_tree"
+	"rts_build_hq"
 }

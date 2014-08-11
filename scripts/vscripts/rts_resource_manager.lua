@@ -7,6 +7,6 @@ function RTS.Resources.Init()
 	--DeepPrintTable( resourceEntities )
 	--DeepPrintTable( Entities:FindAllByModel( "models/props_rock/riveredge_rock006a.vmdl" ) )
 	for _, ent in pairs(resourceEntities) do
-		Msg( ent:GetMaxHealth() .. "\n" )
+		Msg( tostring( ent:GetOrigin() ) .. "\n" )
 	end
 end

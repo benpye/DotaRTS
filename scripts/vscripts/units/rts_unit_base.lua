@@ -53,9 +53,6 @@ function RTS.Units.Base:DoComplete()
 
 	self.Entity:SetControllableByPlayer( self.Player:GetPlayerID(), true )
 
-	local item = CreateItem( "item_quelling_blade", nil, nil )
-	self.Entity:AddItem( item )
-
 	-- add correct "abilities" here
 	for _,v in pairs( self.ABILITIES ) do
 		self.Entity:AddAbility( v )

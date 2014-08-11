@@ -3,11 +3,4 @@
 // the specified key-value combinations.  Use override_hero <hero_to_override> for this.
 "DOTAHeroes"
 {
-	"npc_dota_hero_antimage_test"
-	{
-		"override_hero"				"npc_dota_hero_antimage"
-		"Ability1"					"rts_destroy_tree"		// Ability 1
-		"Ability2"					"rts_internal_destroy_tree"
-		"VisionNighttimeRange"		"1800"										// Range of vision at night time.
-	}
 }

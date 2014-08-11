@@ -103,12 +103,15 @@ function RTS:OnNPCSpawned( event )
 	npc:AddNoDraw()
 	npc:SetMoveCapability( 0 ) -- DOTA_UNIT_MOVE_CAP_NONE
 	npc:SetOrigin( Vector( 1000, 0, 0 ) )
-	RTS.Utils.Timer.Register( function() npc:SetOrigin( Vector( 0, 0, 10000 ) ) end, 0.1 )
 
 	-- TODO: Get spawn point for player from info_player_start_goodguys/badguys
 	local commander = RTS.Units.Commander( npc:GetOrigin(), npc:GetOwner(), npc:GetTeam() )
 	commander:DoComplete()
-	commander.Entity:SetOrigin( Vector( 1000, 0, 0 ) )
+
+	RTS.Utils.Timer.Register( function()
+			commander.Entity:SetOrigin( npc:GetOrigin() )
+			npc:SetOrigin( Vector( 0, 0, 10000 ) )
+		end, 0.1 )
 end
 
 require( "abilities.ability_handler" )

@@ -112,44 +112,6 @@
 	}
 
 	//=================================================================================================================
-	// Destroy Tree
-	//=================================================================================================================
-	"rts_destroy_tree"
-	{
-		// General
-		//-------------------------------------------------------------------------------------------------------------
-		"BaseClass"						"ability_datadriven"
-		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_UNIT_TARGET"
-		"AbilityUnitTargetTeam"			"DOTA_UNIT_TARGET_TEAM_CUSTOM"
-		"AbilityUnitTargetType"			"DOTA_UNIT_TARGET_TREE"
-		"MaxLevel"						"1"
-		
-		// Casting
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilityCastRange"				"300"
-		"AbilityCastPoint"				"0.0" 						// Time before spell goes off when cast
-		"AbilityCastAnimation"			"ACT_DOTA_DISABLED"			// Activity
-		"AnimationPlaybackRate"			"1.0"						// Animation speed multiplier
-
-		// Time		
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilityCooldown"				"0"
-
-		// Cost
-		//-------------------------------------------------------------------------------------------------------------
-		"AbilityManaCost"				"0"
-
-		"OnSpellStart"
-		{
-			"RunScript"
-			{
-				"ScriptFile"			"scripts/vscripts/abilities/ability_handler.lua"
-				"Function"				"OnSpellStart"
-			}
-		}
-	}
-
-	//=================================================================================================================
 	// Destroy Tree: Internal - Actually what destroys trees
 	//=================================================================================================================
 	"rts_internal_destroy_tree"
