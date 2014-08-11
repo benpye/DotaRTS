@@ -12,6 +12,7 @@
 		//-------------------------------------------------------------------------------------------------------------
 		"BaseClass"						"ability_datadriven"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_CHANNELLED"
+		"AbilityTextureName"			"rts_build_hq"
 		"MaxLevel"						"1"
 
 		// Casting
@@ -60,6 +61,7 @@
 		//-------------------------------------------------------------------------------------------------------------
 		"BaseClass"						"ability_datadriven"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_CHANNELLED"
+		"AbilityTextureName"			"rts_spawn_worker"
 		"MaxLevel"						"1"
 
 		// Casting
@@ -108,6 +110,7 @@
 		//-------------------------------------------------------------------------------------------------------------
 		"BaseClass"						"ability_datadriven"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT | DOTA_ABILITY_BEHAVIOR_CHANNELLED"
+		"AbilityTextureName"			"rts_spawn_lumberjack"
 		"MaxLevel"						"1"
 
 		// Casting
@@ -168,6 +171,7 @@
 		//-------------------------------------------------------------------------------------------------------------
 		"BaseClass"						"ability_datadriven"
 		"AbilityBehavior"				"DOTA_ABILITY_BEHAVIOR_POINT"
+		"AbilityTextureName"			"rts_destroy_tree"
 		"MaxLevel"						"1"
 
 		// Casting
