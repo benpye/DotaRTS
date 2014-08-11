@@ -19,6 +19,7 @@ function Precache( context )
 	PrecacheUnitByNameSync( "npc_rts_building_hq", context )
 	PrecacheUnitByNameSync( "npc_rts_unit_commander", context )
 	PrecacheUnitByNameSync( "npc_rts_unit_worker", context )
+	PrecacheUnitByNameSync( "npc_rts_unit_lumberjack", context )
 end
 
 --------------------------------------------------------------------------------
@@ -109,8 +110,8 @@ function RTS:OnNPCSpawned( event )
 	commander:DoComplete()
 
 	RTS.Utils.Timer.Register( function()
-			commander.Entity:SetOrigin( npc:GetOrigin() )
-			npc:SetOrigin( Vector( 0, 0, 10000 ) )
+		commander.Entity:SetOrigin( npc:GetOrigin() )
+		npc:SetOrigin( Vector( 0, 0, 10000 ) )
 		end, 0.1 )
 end
 

@@ -1,0 +1,18 @@
+"RTSResources"
+{
+	"ResourceRegions"
+	{
+		"1"
+		{
+			"Min"	"-33400 -500"
+			"Max"	"-1650 200"
+			"Type"	"RESOURCE_STONE"
+		}
+		"2"
+		{
+			"Min"	"-3100 -1600"
+			"Max"	"-1100 -600"
+			"Type"	"RESOURCE_WOOD"
+		}
+	}
+}
