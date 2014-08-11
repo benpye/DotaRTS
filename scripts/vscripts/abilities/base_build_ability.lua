@@ -1,6 +1,6 @@
 require( "abilities.ability_handler" )
-require( "abilities.channel_interrupt" )
 require( "buildings.rts_building_base" )
+require( "utils.timer" )
 
 if RTS.Abilities.Base == nil then
 	RTS.Abilities.Base = {}
@@ -30,7 +30,7 @@ function RTS.Abilities.Base.RegisterBuild( name, buildingClass )
 		if building.Valid == true then
 			building:ResumeBuilding( caster )
 		else
-			RTS.Abilities.InterruptChannel( caster )
+			RTS.Utils.Timer.Register( function() caster:InterruptChannel() end, 0.1 )
 		end
 	end )
 

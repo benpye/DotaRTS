@@ -5,8 +5,6 @@ end
 function RTS.Abilities._onAbility( trigger, keys )
 	local abilityName = keys.ability:GetAbilityName()
 
-	Msg( abilityName )
-
 	if RTS.Abilities[abilityName] ~= nil then
 		if RTS.Abilities[abilityName][trigger] ~= nil then
 			RTS.Abilities[abilityName][trigger]( keys )

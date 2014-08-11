@@ -1,5 +1,8 @@
 if RTS.Utils == nil then
 	RTS.Utils = {}
+end
+
+if RTS.Utils.Abilities == nil then
 	RTS.Utils.Abilities = {}
 end
 

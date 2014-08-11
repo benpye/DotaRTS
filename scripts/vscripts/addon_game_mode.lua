@@ -11,6 +11,8 @@ if RTS == nil then
 end
 
 require( "utils.abilities" )
+require( "utils.timer" )
+require( "rts_resource_manager" )
 
 -- Precache resources
 function Precache( context )
@@ -42,23 +44,15 @@ function RTS:InitGameMode()
 	GameMode:SetTowerBackdoorProtectionEnabled( false )
 	GameMode:SetRecommendedItemsDisabled( true )
 	GameMode:SetTopBarTeamValuesVisible( false )
+	-- GameMode:SetCameraDistanceOverride( 2000 )
 
 	-- Hook into game events
 	ListenToGameEvent( "entity_killed", Dynamic_Wrap( RTS, "OnEntityKilled" ), self )
 	ListenToGameEvent( "npc_spawned", Dynamic_Wrap( RTS, "OnNPCSpawned" ), self )
 	ListenToGameEvent( "game_rules_state_change", Dynamic_Wrap( RTS, "OnGameRulesStateChange" ), self )
 
-	RTS.Abilities.InterruptChannelInit()
-
 	RTS.Utils.Abilities.Init()
-
-	-- Register Think
-	-- GameMode:SetContextThink( "RTS.GameThink", function() return RTS.GameThink() end, 0.1 )
-end
-
---------------------------------------------------------------------------------
-function RTS:GameThink()
-	return 0.1
+	RTS.Utils.Timer.Init()
 end
 
 function RTS:OnEntityKilled( event )
@@ -93,6 +87,7 @@ function RTS:OnGameRulesStateChange()
 	if newState == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
 		-- TODO: Replace this with our own UI
 		SendToConsole( "dota_sf_hud_channelbar 0" )
+		RTS.Resources.Init()
 	end
 end
 
@@ -107,9 +102,13 @@ function RTS:OnNPCSpawned( event )
 	npc:AddNewModifier( npc, nil, "modifier_invulnerable", {} )
 	npc:AddNoDraw()
 	npc:SetMoveCapability( 0 ) -- DOTA_UNIT_MOVE_CAP_NONE
+	npc:SetOrigin( Vector( 1000, 0, 0 ) )
+	RTS.Utils.Timer.Register( function() npc:SetOrigin( Vector( 0, 0, 10000 ) ) end, 0.1 )
 
+	-- TODO: Get spawn point for player from info_player_start_goodguys/badguys
 	local commander = RTS.Units.Commander( npc:GetOrigin(), npc:GetOwner(), npc:GetTeam() )
 	commander:DoComplete()
+	commander.Entity:SetOrigin( Vector( 1000, 0, 0 ) )
 end
 
 require( "abilities.ability_handler" )
