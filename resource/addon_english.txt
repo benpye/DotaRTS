@@ -2,7 +2,7 @@
 {
 	"Language"		"English"
 	"Tokens"
-	{		
+	{
 		"addon_game_name"									"Dota RTS"
 		"npc_rts_unit_commander"							"Commander"
 		"npc_rts_unit_worker"								"Worker"
