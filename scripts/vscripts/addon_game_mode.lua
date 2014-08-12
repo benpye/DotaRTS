@@ -17,9 +17,11 @@ require( "rts_resource_manager" )
 -- Precache resources
 function Precache( context )
 	PrecacheUnitByNameSync( "npc_rts_building_hq", context )
+	PrecacheUnitByNameSync( "npc_rts_building_barracks", context )
 	PrecacheUnitByNameSync( "npc_rts_unit_commander", context )
 	PrecacheUnitByNameSync( "npc_rts_unit_worker", context )
 	PrecacheUnitByNameSync( "npc_rts_unit_lumberjack", context )
+	PrecacheUnitByNameSync( "npc_rts_unit_soldier", context )
 end
 
 --------------------------------------------------------------------------------
