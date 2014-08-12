@@ -11,14 +11,14 @@ function RTS.Utils.Timer.Init()
 	local GameMode = GameRules:GetGameModeEntity()
 
 	-- Register Think
-	GameMode:SetContextThink( "RTS.Utils.Timer.Think", RTS.Utils.Timer.Think, 0.1 )
+	GameMode:SetContextThink( "RTS.Utils.Timer.Think", RTS.Utils.Timer.Think, 0.25 )
 
 	RTS.Utils.Timer._counter = 0.0
 	RTS.Utils.Timer._functions = {}
 end
 
 function RTS.Utils.Timer.Think()
-	RTS.Utils.Timer._counter = RTS.Utils.Timer._counter + 0.1
+	RTS.Utils.Timer._counter = RTS.Utils.Timer._counter + 0.25
 
 	for i = #RTS.Utils.Timer._functions, 1, -1 do
 		local func = RTS.Utils.Timer._functions[ i ]
@@ -32,7 +32,7 @@ function RTS.Utils.Timer.Think()
 		end
 	end
 
-	return 0.1
+	return 0.25
 end
 
 function RTS.Utils.Timer.Register( func, delay )

@@ -17,7 +17,7 @@ end
 -- Base unit class, provides simple building mechanic
 
 RTS.Units.Base.BUILDTIME = 10.0
-RTS.Units.Base.TICKSIZE = 0.1
+RTS.Units.Base.TICKSIZE = 0.25
 RTS.Units.Base.UNIT = "npc_rts_unit_base"
 RTS.Units.Base.MAXCOUNT = -1
 RTS.Units.Base.ABILITIES = {}

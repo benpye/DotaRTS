@@ -114,7 +114,7 @@ function RTS:OnNPCSpawned( event )
 	RTS.Utils.Timer.Register( function()
 		commander.Entity:SetOrigin( npc:GetOrigin() )
 		npc:SetOrigin( Vector( 0, 0, 10000 ) )
-		end, 0.1 )
+		end, 0.25 )
 end
 
 require( "abilities.ability_handler" )

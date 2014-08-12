@@ -44,7 +44,7 @@ RTS.Abilities.RegisterAbility( "rts_get_wood", "OnSpellStart", function ( keys )
 
 	if unit.TYPE ~= resource.Type then
 		GameRules:SendCustomMessage( "Wrong resource!", team, player:GetPlayerID() )
-		RTS.Utils.Timer.Register( function() caster:InterruptChannel() end, 0.1 )
+		RTS.Utils.Timer.Register( function() caster:InterruptChannel() end, 0.25 )
 	else
 		unit:GatherResource( resource )
 	end

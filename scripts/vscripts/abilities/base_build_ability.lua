@@ -30,7 +30,7 @@ function RTS.Abilities.Base.RegisterBuild( name, buildingClass )
 		if building.Valid == true then
 			building:ResumeBuilding( caster )
 		else
-			RTS.Utils.Timer.Register( function() caster:InterruptChannel() end, 0.1 )
+			RTS.Utils.Timer.Register( function() caster:InterruptChannel() end, 0.25 )
 		end
 	end )
 

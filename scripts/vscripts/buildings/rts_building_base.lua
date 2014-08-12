@@ -30,7 +30,7 @@ end
 -- Base building class, provides simple building mechanic
 
 RTS.Buildings.Base.BUILDTIME = 1.0
-RTS.Buildings.Base.TICKSIZE = 0.1
+RTS.Buildings.Base.TICKSIZE = 0.25
 RTS.Buildings.Base.UNIT = "npc_rts_building_base"
 RTS.Buildings.Base.MAXCOUNT = -1
 RTS.Buildings.Base.ABILITIES = {}
