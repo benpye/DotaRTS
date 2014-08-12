@@ -2,6 +2,7 @@ if RTS.Resources == nil then
 	RTS.Resources = {}
 	RTS.Resources.Regions = {}
 	RTS.Resources.List = {}
+	RTS.Resources.Players = {}
 	RTS.Resources.Resource = class({})
 end
 
@@ -55,6 +56,37 @@ function RTS.Resources.Init()
 	for _, ent in pairs( resourceEntities ) do
 		table.insert( RTS.Resources.List, RTS.Resources.Resource( ent ) )
 	end
+end
+
+function RTS.Resources.GetResourceForPlayer( player, resource )
+	local playerID = player:GetPlayerID()
+	local playerResources = RTS.Resources.Players[ playerID ]
+	if playerResources == nil then
+		return 0
+	else
+		local playerResource = playerResources[ resource ]
+		if playerResource == nil then
+			return 0
+		else
+			return playerResource
+		end
+	end
+end
+
+function RTS.Resources.GivePlayerResources( player, resource, count )
+	local playerID = player:GetPlayerID()
+	if RTS.Resources.Players[ playerID ] == nil then
+		RTS.Resources.Players[ playerID ] = {}
+	end
+
+	if RTS.Resources.Players[ playerID ][ resource ] == nil then
+		RTS.Resources.Players[ playerID ][ resource ] = 0
+	end
+
+	RTS.Resources.Players[ playerID ][ resource ] = RTS.Resources.Players[ playerID ][ resource ] + count
+
+	Msg( "[RESOURCES] Player " .. PlayerResource:GetPlayerName( playerID ) .. " has "
+		.. tostring( RTS.Resources.Players[ playerID ][ resource ] ) .. " " .. resource .. "\n" )
 end
 
 function RTS.Resources.Resource:constructor( ent )

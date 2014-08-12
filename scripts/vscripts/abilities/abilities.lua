@@ -13,7 +13,23 @@ RTS.Abilities.Base.RegisterBuild( "rts_build_hq", RTS.Buildings.HQ )
 
 RTS.Abilities.RegisterAbility( "rts_get_wood", "OnSpellStart", function ( keys )
 	local caster = keys.caster
+	local gatherer = RTS.Units.GetByEntity( caster )
+
 	local tree = keys.target
+	if tree == nil then
+		local treeorigin = keys.target_points[ 1 ] 
+		local ents = Entities:FindAllByClassnameWithin( "ent_dota_tree", treeorigin, 100 )
+
+		if #ents == 0 then
+			if gatherer.CurrentResource ~= nil then
+				gatherer:GoAndGather( gatherer.CurrentResource )
+			end
+			return
+		end
+
+		tree = ents[ 1 ]
+	end
+
 	local player = caster:GetOwner()
 	local team = caster:GetTeamNumber()
 	local unit = RTS.Units.GetByEntity( caster )
@@ -51,9 +67,9 @@ RTS.Abilities.RegisterAbility( "rts_deposit_resource", "OnSpellStart", function 
 	end
 
 	local gatherer = RTS.Units.GetByEntity( caster )
+	gatherer:DepositResource()
 
 	if gatherer.CurrentResource ~= nil then
-		local ability = RTS.Utils.GetAbilityByName( caster, "rts_get_wood" )
-		caster:CastAbilityOnTarget( gatherer.CurrentResource.Entity, ability, 0 )
+		gatherer:GoAndGather( gatherer.CurrentResource )
 	end
 	end )
