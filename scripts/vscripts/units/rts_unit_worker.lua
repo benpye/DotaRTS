@@ -8,5 +8,6 @@ RTS.Units.Worker.BUILDTIME = 1.0
 RTS.Units.Worker.UNIT = "npc_rts_unit_worker"
 RTS.Units.Worker.MAXCOUNT = -1
 RTS.Units.Worker.ABILITIES = {
-	"rts_spawn_worker"
+	"rts_spawn_worker",
+	"rts_build_barracks"
 }

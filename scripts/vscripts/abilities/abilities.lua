@@ -2,14 +2,19 @@ require( "abilities.base_build_ability" )
 require( "abilities.base_spawn_ability" )
 require( "buildings.rts_building_base" )
 require( "buildings.rts_building_hq" )
+require( "buildings.rts_building_barracks" )
 require( "units.rts_unit_base" )
 require( "units.rts_unit_worker" )
 require( "units.rts_unit_gatherer" )
+require( "units.rts_unit_soldier" )
 require( "rts_resource_manager" )
 
 RTS.Abilities.Base.RegisterSpawn( "rts_spawn_worker", RTS.Units.Worker )
 RTS.Abilities.Base.RegisterSpawn( "rts_spawn_lumberjack", RTS.Units.Gatherer )
+RTS.Abilities.Base.RegisterSpawn( "rts_spawn_soldier", RTS.Units.Soldier )
+
 RTS.Abilities.Base.RegisterBuild( "rts_build_hq", RTS.Buildings.HQ )
+RTS.Abilities.Base.RegisterBuild( "rts_build_barracks", RTS.Buildings.Barracks )
 
 RTS.Abilities.RegisterAbility( "rts_get_wood", "OnSpellStart", function ( keys )
 	local caster = keys.caster
