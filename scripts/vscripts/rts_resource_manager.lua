@@ -85,9 +85,6 @@ function RTS.Resources.GivePlayerResources( player, resource, count )
 
 	RTS.Resources.Players[ playerID ][ resource ] = RTS.Resources.Players[ playerID ][ resource ] + count
 
-	Msg( "[RESOURCES] Player " .. PlayerResource:GetPlayerName( playerID ) .. " has "
-		.. tostring( RTS.Resources.Players[ playerID ][ resource ] ) .. " " .. resource .. "\n" )
-
 	RTS.Resources.SendPlayerUpdate( player )
 end
 
@@ -106,7 +103,6 @@ function RTS.Resources.Resource:constructor( ent )
 		if RTS.Resources._VectorInRegion( self.Origin, region ) then
 			self.RegionID = k
 			self.Type = region.Resource
-			Msg( "Resource " .. self.Type .. " at " .. tostring( self.Origin ) .. "\n" )
 		end
 	end
 

@@ -30,13 +30,14 @@ end
 -- Base building class, provides simple building mechanic
 
 RTS.Buildings.Base.BUILDTIME = 1.0
-RTS.Buildings.Base.TICKSIZE = 0.25
+RTS.Buildings.Base.TICKSIZE = 0.01
 RTS.Buildings.Base.UNIT = "npc_rts_building_base"
 RTS.Buildings.Base.MAXCOUNT = -1
 RTS.Buildings.Base.ABILITIES = {}
 RTS.Buildings.Base.Valid = false
 RTS.Buildings.Base.Complete = false
 RTS.Buildings.Base._inProgress = false
+RTS.Buildings.Base._lastTime = 0.0
 
 function RTS.Buildings.Base:constructor( position, player, team )
 	if self.MAXCOUNT ~= -1 then
@@ -101,7 +102,12 @@ function RTS.Buildings.Base:Building()
 	end
 
 	local maxHealth = self.Entity:GetMaxHealth()
-	local healthTick = maxHealth / ( self.BUILDTIME / self.TICKSIZE )
+
+	local ctime = GameRules:GetGameTime()
+	local dtime = ctime - self._lastTime
+	self._lastTime = ctime
+	local healthTick = maxHealth / ( self.BUILDTIME / dtime )
+	
 	local curHealth = self.Entity:GetHealth()
 	local newHealth = curHealth + healthTick
 	if newHealth > maxHealth then
@@ -126,6 +132,7 @@ end
 function RTS.Buildings.Base:ResumeBuilding( caster )
 	self._inProgress = true
 	self.Caster = caster
+	self._lastTime = GameRules:GetGameTime()
 	self.Entity:SetThink( "Building", self, "building", self.TICKSIZE )
 end
 

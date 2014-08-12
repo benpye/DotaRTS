@@ -8,24 +8,25 @@ if RTS.Units.Gatherer == nil then
 end
 
 RTS.Units.Gatherer.BUILDTIME = 1.0
-RTS.Units.Gatherer.TICKSIZE = 0.1
 RTS.Units.Gatherer.UNIT = "npc_rts_unit_lumberjack"
 RTS.Units.Gatherer.MAXCOUNT = -1
-RTS.Units.Gatherer.TYPE = "RESOURCE_WOOD"
-RTS.Units.Gatherer.INVENTORY = 100
-RTS.Units.Gatherer.RATE = 50
 RTS.Units.Gatherer.ABILITIES = {
 	"rts_get_wood",
 	"rts_deposit_resource"
 }
-RTS.Units.Gatherer.GATHER_ABILITY = "rts_get_wood"
 
+-- statics specific to the gatherer type of unit
+RTS.Units.Gatherer.TYPE = "RESOURCE_WOOD"
+RTS.Units.Gatherer.INVENTORY = 100
+RTS.Units.Gatherer.RATE = 50
+RTS.Units.Gatherer.GATHER_ABILITY = "rts_get_wood"
 RTS.Units.Gatherer.Resources = 0
 RTS.Units.Gatherer.IsGathering = false
 
 function RTS.Units.Gatherer:GatherResource( resource )
 	self.CurrentResource = resource
 	self.IsGathering = true
+	self._lastTime = GameRules:GetGameTime()
 	self.Entity:SetThink( "Gathering", self, "gathering", self.TICKSIZE )
 end
 
@@ -34,7 +35,11 @@ function RTS.Units.Gatherer:Gathering()
 		return nil
 	end
 
-	local newResources = self.Resources + self.RATE * self.TICKSIZE
+	local ctime = GameRules:GetGameTime()
+	local dtime = ctime - self._lastTime
+	self._lastTime = ctime
+
+	local newResources = self.Resources + self.RATE * dtime
 	if newResources >= self.INVENTORY then
 		newResources = self.INVENTORY
 		self.IsGathering = false

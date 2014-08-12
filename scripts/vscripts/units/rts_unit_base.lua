@@ -17,7 +17,7 @@ end
 -- Base unit class, provides simple building mechanic
 
 RTS.Units.Base.BUILDTIME = 10.0
-RTS.Units.Base.TICKSIZE = 0.25
+RTS.Units.Base.TICKSIZE = 0.01
 RTS.Units.Base.UNIT = "npc_rts_unit_base"
 RTS.Units.Base.MAXCOUNT = -1
 RTS.Units.Base.ABILITIES = {}
@@ -25,6 +25,7 @@ RTS.Units.Base.Valid = false
 RTS.Units.Base.Complete = false
 RTS.Units.Base._inProgress = false
 RTS.Units.Base._completion = 0.0
+RTS.Units.Base._lastTime = 0.0
 
 function RTS.Units.Base:constructor( position, player, team )
 	if self.MAXCOUNT ~= -1 then
@@ -83,7 +84,10 @@ function RTS.Units.Base:Building()
 		return nil
 	end
 
-	local completionTick = 100.0 / ( self.BUILDTIME / self.TICKSIZE )
+	local ctime = GameRules:GetGameTime()
+	local dtime = ctime - self._lastTime
+	self._lastTime = ctime
+	local completionTick = 100.0 / ( self.BUILDTIME / dtime )
 	local newCompletion = self._completion + completionTick
 	if newCompletion >= 100.0 then
 		self.Complete = true
@@ -115,6 +119,7 @@ end
 function RTS.Units.Base:StartBuilding( caster )
 	self._inProgress = true
 	self.Caster = caster
+	self._lastTime = GameRules:GetGameTime()
 	self.Caster:SetThink( "Building", self, "building", self.TICKSIZE )
 end
 
