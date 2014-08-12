@@ -85,7 +85,7 @@ function RTS.Buildings.Base:DoComplete()
 		self.Entity:AddAbility( v )
 	end
 
-	for i=0, self.Entity:GetAbilityCount(), 1 do
+	for i=0, self.Entity:GetAbilityCount() - 1, 1 do
 		local ability = self.Entity:GetAbilityByIndex( i )
 		if ability == nil then
 			break

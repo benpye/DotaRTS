@@ -87,6 +87,16 @@ function RTS.Resources.GivePlayerResources( player, resource, count )
 
 	Msg( "[RESOURCES] Player " .. PlayerResource:GetPlayerName( playerID ) .. " has "
 		.. tostring( RTS.Resources.Players[ playerID ][ resource ] ) .. " " .. resource .. "\n" )
+
+	RTS.Resources.SendPlayerUpdate( player )
+end
+
+function RTS.Resources.SendPlayerUpdate( player )
+	local resourceUpdate = {}
+	resourceUpdate.playerID = player:GetPlayerID()
+	resourceUpdate.wood = RTS.Resources.GetResourceForPlayer( player, "RESOURCE_WOOD" )
+	resourceUpdate.stone = RTS.Resources.GetResourceForPlayer( player, "RESOURCE_STONE" )
+	FireGameEvent( "rts_resource_update", resourceUpdate )
 end
 
 function RTS.Resources.Resource:constructor( ent )

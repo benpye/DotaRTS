@@ -106,6 +106,11 @@ end
 
 function RTS.Units.Gatherer:GoAndDesposit()
 	local buildings = RTS.Buildings.GetByPlayer( self.Player, RTS.Buildings.HQ )
+	if #buildings == 0 then
+		GameRules:SendCustomMessage( "No HQ building!", self.Team, self.Player:GetPlayerID() )
+		return
+	end
+
 	local hq = buildings[ 1 ]
 
 	local ability = RTS.Utils.GetAbilityByName( self.Entity, "rts_deposit_resource" )
