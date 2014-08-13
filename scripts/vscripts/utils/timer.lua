@@ -10,20 +10,17 @@ end
 function RTS.Utils.Timer.Init()
 	local GameMode = GameRules:GetGameModeEntity()
 
-	-- Register Think
-	GameMode:SetContextThink( "RTS.Utils.Timer.Think", RTS.Utils.Timer.Think, 0.01 )
-	RTS.Utils.Timer._lastTime = GameRules:GetGameTime()
+	RTS.Utils.Timer._functions = {}
 
 	RTS.Utils.Timer._counter = GameRules:GetGameTime()
-	RTS.Utils.Timer._functions = {}
 end
 
-function RTS.Utils.Timer.Think()
-	RTS.Utils.Timer._counter = GameRules:GetGameTime()
+function RTS.Utils.Timer.Think( time )
+	RTS.Utils.Timer._counter = time
 
 	for i = #RTS.Utils.Timer._functions, 1, -1 do
 		local func = RTS.Utils.Timer._functions[ i ]
-		if func.timer <= RTS.Utils.Timer._counter then
+		if func.timer <= time then
 			local nextTime = func.func()
 			if nextTime == nil then
 				table.remove( RTS.Utils.Timer._functions, i )
@@ -32,8 +29,6 @@ function RTS.Utils.Timer.Think()
 			end
 		end
 	end
-
-	return 0.01
 end
 
 function RTS.Utils.Timer.Register( func, delay )

@@ -28,15 +28,18 @@ RTS.Abilities.RegisterAbility( "rts_get_wood", "OnSpellStart", function ( keys )
 		local ents = Entities:FindAllByClassnameWithin( "ent_dota_tree", treeorigin, 1 )
 
 		if #ents == 0 then
-			if gatherer.CurrentResource ~= nil then
-				gatherer:GoAndGather( gatherer.CurrentResource )
-			else
-				GameRules:SendCustomMessage( "Not a valid target!", team, player:GetPlayerID() )
-			end
+			GameRules:SendCustomMessage( "Not a valid target!", team, player:GetPlayerID() )
 			return
 		end
 
 		tree = ents[ 1 ]
+	end
+
+	if gatherer.CurrentResource ~= nil then
+		if tree ~= gatherer.CurrentResource.Entity then
+			gatherer:GoAndGather( gatherer.CurrentResource )
+			return
+		end
 	end
 
 	local unit = RTS.Units.GetByEntity( caster )
@@ -44,7 +47,7 @@ RTS.Abilities.RegisterAbility( "rts_get_wood", "OnSpellStart", function ( keys )
 
 	if unit.TYPE ~= resource.Type then
 		GameRules:SendCustomMessage( "Wrong resource!", team, player:GetPlayerID() )
-		RTS.Utils.Timer.Register( function() caster:InterruptChannel() end, 0.25 )
+		RTS.Utils.Timer.Register( function() caster:InterruptChannel() end, 0.1 )
 	else
 		unit:GatherResource( resource )
 	end

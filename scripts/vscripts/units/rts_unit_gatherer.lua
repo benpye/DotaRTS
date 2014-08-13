@@ -1,6 +1,7 @@
 require( "units.rts_unit_base" )
 require( "buildings.rts_building_hq" )
 require( "utils.abilities" )
+require( "utils.timer" )
 require( "rts_resource_manager" )
 
 if RTS.Units.Gatherer == nil then
@@ -118,7 +119,7 @@ end
 function RTS.Units.Gatherer:GoAndGather( ent )
 	self.CurrentResource = ent
 	local ability = RTS.Utils.GetAbilityByName( self.Entity, self.GATHER_ABILITY )
-	self.Entity:CastAbilityOnPosition( self.CurrentResource.Entity:GetOrigin(), ability, 0 )
+	RTS.Utils.Timer.Register( function () self.Entity:CastAbilityOnPosition( self.CurrentResource.Entity:GetOrigin(), ability, 0 ) end, 0.1 )
 end
 
 function RTS.Units.Gatherer:DepositResource()

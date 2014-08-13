@@ -99,8 +99,7 @@ function RTS.Units.Base:Building( dtime )
 		self:RemoveThinker( "Building" )
 		return
 	end
-
-	Msg( tostring( self._completion ) .. "\n" )
+	
 	local completionTick = 100.0 / ( self.BUILDTIME / dtime )
 	local newCompletion = self._completion + completionTick
 	if newCompletion >= 100.0 then

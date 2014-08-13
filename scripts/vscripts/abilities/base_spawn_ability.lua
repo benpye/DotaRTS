@@ -18,7 +18,7 @@ function RTS.Abilities.Base.RegisterSpawn( name, spawnClass )
 		if unit.Valid == true then
 			unit:StartBuilding( caster )
 		else
-			RTS.Utils.Timer.Register( function() caster:InterruptChannel() end, 0.25 )
+			RTS.Utils.Timer.Register( function() caster:InterruptChannel() end, 0.1 )
 		end
 	end )
 
