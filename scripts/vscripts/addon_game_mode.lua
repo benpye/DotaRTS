@@ -56,6 +56,25 @@ function RTS:InitGameMode()
 
 	RTS.Utils.Abilities.Init()
 	RTS.Utils.Timer.Init()
+
+	self._lastTime = GameRules:GetGameTime()
+	GameRules:GetGameModeEntity():SetThink( "Think", self, 0.01 ) 
+end
+
+function RTS:Think()
+	local ctime = GameRules:GetGameTime()
+	local dtime = ctime - self._lastTime
+	self._lastTime = ctime
+
+	for _, v in pairs( RTS.Units.List ) do
+		v:_Think( dtime )
+	end
+
+	for _, v in pairs( RTS.Buildings.List ) do
+		v:_Think( dtime )
+	end
+
+	return 0.01
 end
 
 function RTS:OnEntityKilled( event )

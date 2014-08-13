@@ -1,7 +1,7 @@
 if RTS.Units == nil then
 	RTS.Units = {}
 	RTS.Units.List = {}
-	RTS.Units.Base = class({})
+	RTS.Units.Base = class( {} )
 end
 
 function RTS.Units.GetByEntity( ent )
@@ -17,7 +17,6 @@ end
 -- Base unit class, provides simple building mechanic
 
 RTS.Units.Base.BUILDTIME = 10.0
-RTS.Units.Base.TICKSIZE = 0.01
 RTS.Units.Base.UNIT = "npc_rts_unit_base"
 RTS.Units.Base.MAXCOUNT = -1
 RTS.Units.Base.ABILITIES = {}
@@ -25,9 +24,11 @@ RTS.Units.Base.Valid = false
 RTS.Units.Base.Complete = false
 RTS.Units.Base._inProgress = false
 RTS.Units.Base._completion = 0.0
-RTS.Units.Base._lastTime = 0.0
 
 function RTS.Units.Base:constructor( position, player, team )
+	-- Only a shallow copy, must do this here
+	self._thinkers = {}	
+
 	if self.MAXCOUNT ~= -1 then
 		local existingCount = 0
 		for _, unit in pairs(RTS.Units.List) do
@@ -55,6 +56,20 @@ function RTS.Units.Base:constructor( position, player, team )
 	self.Valid = true
 end
 
+function RTS.Units.Base:_Think( dtime )
+	for _, v in pairs( self._thinkers ) do
+		v[2]( v[1], dtime )
+	end
+end
+
+function RTS.Units.Base:AddThinker( name, func )
+	self._thinkers[ name ] = { self, func }
+end
+
+function RTS.Units.Base:RemoveThinker( name )
+	self._thinkers[ name ] = nil
+end
+
 function RTS.Units.Base:DoComplete()
 	self.Complete = true
 	self._inProgress = false
@@ -78,15 +93,14 @@ function RTS.Units.Base:DoComplete()
 	end
 end
 
-function RTS.Units.Base:Building()
+function RTS.Units.Base:Building( dtime )
 	-- If we stop building stop building
 	if self._inProgress == false then
-		return nil
+		self:RemoveThinker( "Building" )
+		return
 	end
 
-	local ctime = GameRules:GetGameTime()
-	local dtime = ctime - self._lastTime
-	self._lastTime = ctime
+	Msg( tostring( self._completion ) .. "\n" )
 	local completionTick = 100.0 / ( self.BUILDTIME / dtime )
 	local newCompletion = self._completion + completionTick
 	if newCompletion >= 100.0 then
@@ -99,10 +113,8 @@ function RTS.Units.Base:Building()
 	if self.Complete == true then
 		self:DoComplete()
 		self.Caster:InterruptChannel()
-		return nil
+		self:RemoveThinker( "Building" )
 	end
-
-	return self.TICKSIZE
 end
 
 function RTS.Units.Base:StopBuilding()
@@ -119,8 +131,8 @@ end
 function RTS.Units.Base:StartBuilding( caster )
 	self._inProgress = true
 	self.Caster = caster
-	self._lastTime = GameRules:GetGameTime()
-	self.Caster:SetThink( "Building", self, "building", self.TICKSIZE )
+	self:AddThinker( "Building", self.Building )
+	-- self.Caster:SetThink( "Building", self, "building", self.TICKSIZE )
 end
 
 function RTS.Units.Base:IsBuilding()

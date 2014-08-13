@@ -4,7 +4,7 @@ require( "utils.abilities" )
 require( "rts_resource_manager" )
 
 if RTS.Units.Gatherer == nil then
-	RTS.Units.Gatherer = class({}, {}, RTS.Units.Base)
+	RTS.Units.Gatherer = class( {}, {}, RTS.Units.Base )
 end
 
 RTS.Units.Gatherer.BUILDTIME = 1.0
@@ -26,18 +26,14 @@ RTS.Units.Gatherer.IsGathering = false
 function RTS.Units.Gatherer:GatherResource( resource )
 	self.CurrentResource = resource
 	self.IsGathering = true
-	self._lastTime = GameRules:GetGameTime()
-	self.Entity:SetThink( "Gathering", self, "gathering", self.TICKSIZE )
+	self:AddThinker( "Gathering", self.Gathering )
 end
 
-function RTS.Units.Gatherer:Gathering()
+function RTS.Units.Gatherer:Gathering( dtime )
 	if self.IsGathering == false then
-		return nil
+		self:RemoveThinker( "Gathering" )
+		return
 	end
-
-	local ctime = GameRules:GetGameTime()
-	local dtime = ctime - self._lastTime
-	self._lastTime = ctime
 
 	local newResources = self.Resources + self.RATE * dtime
 	if newResources >= self.INVENTORY then
@@ -98,10 +94,7 @@ function RTS.Units.Gatherer:Gathering()
 
 	if self.IsGathering == false then
 		self:GoAndDesposit()
-
-		return nil
-	else
-		return self.TICKSIZE
+		self:RemoveThinker( "Gathering" )
 	end
 end
 

@@ -1,7 +1,7 @@
 require( "units.rts_unit_base" )
 
 if RTS.Units.Worker == nil then
-	RTS.Units.Worker = class({}, {}, RTS.Units.Base)
+	RTS.Units.Worker = class( {}, {}, RTS.Units.Base )
 end
 
 RTS.Units.Worker.BUILDTIME = 1.0

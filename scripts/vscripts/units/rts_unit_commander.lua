@@ -1,7 +1,7 @@
 require( "units.rts_unit_base" )
 
 if RTS.Units.Commander == nil then
-	RTS.Units.Commander = class({}, {}, RTS.Units.Base)
+	RTS.Units.Commander = class( {}, {}, RTS.Units.Base )
 end
 
 RTS.Units.Commander.BUILDTIME = 1.0

@@ -40,6 +40,9 @@ RTS.Buildings.Base._inProgress = false
 RTS.Buildings.Base._lastTime = 0.0
 
 function RTS.Buildings.Base:constructor( position, player, team )
+	-- Only a shallow copy, must do this here
+	self._thinkers = {}	
+
 	if self.MAXCOUNT ~= -1 then
 		local existingCount = 0
 		for _, building in pairs(RTS.Buildings.List) do
@@ -74,6 +77,20 @@ function RTS.Buildings.Base:constructor( position, player, team )
 	self.Valid = true
 end
 
+function RTS.Buildings.Base:_Think( dtime )
+	for _, v in pairs( self._thinkers ) do
+		v[2]( v[1], dtime )
+	end
+end
+
+function RTS.Buildings.Base:AddThinker( name, func )
+	self._thinkers[ name ] = { self, func }
+end
+
+function RTS.Buildings.Base:RemoveThinker( name )
+	self._thinkers[ name ] = nil
+end
+
 function RTS.Buildings.Base:DoComplete()
 	self.Entity:RemoveAbility( "rts_building_incomplete" )
 
@@ -95,17 +112,15 @@ function RTS.Buildings.Base:DoComplete()
 	end
 end
 
-function RTS.Buildings.Base:Building()
+function RTS.Buildings.Base:Building( dtime )
 	-- If we stop building stop building
 	if self._inProgress == false then
-		return nil
+		self:RemoveThinker( "Building" )
+		return
 	end
 
 	local maxHealth = self.Entity:GetMaxHealth()
-
-	local ctime = GameRules:GetGameTime()
-	local dtime = ctime - self._lastTime
-	self._lastTime = ctime
+	
 	local healthTick = maxHealth / ( self.BUILDTIME / dtime )
 	
 	local curHealth = self.Entity:GetHealth()
@@ -119,10 +134,8 @@ function RTS.Buildings.Base:Building()
 	if self.Complete == true then
 		self.Caster:InterruptChannel()
 		self:DoComplete()
-		return nil
+		self:RemoveThinker( "Building" )
 	end
-
-	return self.TICKSIZE
 end
 
 function RTS.Buildings.Base:StopBuilding()
@@ -133,7 +146,7 @@ function RTS.Buildings.Base:ResumeBuilding( caster )
 	self._inProgress = true
 	self.Caster = caster
 	self._lastTime = GameRules:GetGameTime()
-	self.Entity:SetThink( "Building", self, "building", self.TICKSIZE )
+	self:AddThinker( "Building", self.Building )
 end
 
 function RTS.Buildings.Base:IsBuilding()
